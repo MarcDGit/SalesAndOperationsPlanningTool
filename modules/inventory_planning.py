@@ -28,6 +28,11 @@ class InventoryOptimizer:
         if 'demand' not in self.data.columns:
             st.error("Demand column not found in data")
             return None
+        
+        # Ensure demand is numeric
+        self.data['demand'] = pd.to_numeric(self.data['demand'], errors='coerce')
+        if 'inventory' in self.data.columns:
+            self.data['inventory'] = pd.to_numeric(self.data['inventory'], errors='coerce')
             
         outliers_results = {}
         
@@ -68,6 +73,9 @@ class InventoryOptimizer:
         """Calculate safety stock based on demand variability"""
         if 'demand' not in self.data.columns:
             return None
+        
+        # Ensure demand is numeric
+        self.data['demand'] = pd.to_numeric(self.data['demand'], errors='coerce')
             
         results = []
         
@@ -111,7 +119,15 @@ class InventoryOptimizer:
             return None
             
         # Calculate total demand value per SKU
-        sku_analysis = self.data.groupby('sku').agg({
+        # Ensure demand column is numeric and remove any NaN values
+        self.data['demand'] = pd.to_numeric(self.data['demand'], errors='coerce')
+        clean_data = self.data.dropna(subset=['demand'])
+        
+        if clean_data.empty:
+            st.error("No valid numeric demand data found")
+            return None
+        
+        sku_analysis = clean_data.groupby('sku').agg({
             'demand': ['sum', 'mean', 'std'],
             'location': 'nunique'
         }).round(2)
@@ -125,14 +141,16 @@ class InventoryOptimizer:
         sku_analysis['cumulative_percent'] = (sku_analysis['cumulative_demand'] / 
                                             sku_analysis['total_demand'].sum()) * 100
         
-        # Assign ABC categories
-        conditions = [
-            sku_analysis['cumulative_percent'] <= 80,
-            sku_analysis['cumulative_percent'] <= 95,
-            sku_analysis['cumulative_percent'] > 95
-        ]
-        choices = ['A', 'B', 'C']
-        sku_analysis['abc_category'] = np.select(conditions, choices)
+        # Assign ABC categories using pandas cut method
+        def assign_abc_category(cumulative_percent):
+            if cumulative_percent <= 80:
+                return 'A'
+            elif cumulative_percent <= 95:
+                return 'B'
+            else:
+                return 'C'
+        
+        sku_analysis['abc_category'] = sku_analysis['cumulative_percent'].apply(assign_abc_category)
         
         return sku_analysis
     
@@ -140,6 +158,10 @@ class InventoryOptimizer:
         """Calculate inventory turnover metrics"""
         if 'inventory' not in self.data.columns:
             return None
+        
+        # Ensure numeric data types
+        self.data['demand'] = pd.to_numeric(self.data['demand'], errors='coerce')
+        self.data['inventory'] = pd.to_numeric(self.data['inventory'], errors='coerce')
             
         results = []
         
@@ -258,6 +280,8 @@ def run():
                     st.subheader("📅 Time Series Overview")
                     
                     # Aggregate demand by week
+                    # Ensure demand is numeric
+                    df['demand'] = pd.to_numeric(df['demand'], errors='coerce')
                     weekly_demand = df.groupby('week')['demand'].sum().reset_index()
                     
                     fig = px.line(weekly_demand, x='week', y='demand', 
@@ -422,6 +446,8 @@ def run():
                 
                 # Seasonal analysis if we have enough data
                 if len(df) > 52:  # At least one year of weekly data
+                    # Ensure demand is numeric
+                    df['demand'] = pd.to_numeric(df['demand'], errors='coerce')
                     weekly_demand = df.groupby('week')['demand'].sum().reset_index()
                     weekly_demand.set_index('week', inplace=True)
                     
