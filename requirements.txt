@@ -46,3 +46,10 @@ tzlocal==5.2
 urllib3==2.1.0
 validators==0.22.0
 zipp==3.17.0
+# Additional packages for inventory planning
+openpyxl==3.1.2
+xlrd==2.0.1
+plotly==5.17.0
+statsmodels==0.14.1
+seaborn==0.13.0
+matplotlib==3.8.2
