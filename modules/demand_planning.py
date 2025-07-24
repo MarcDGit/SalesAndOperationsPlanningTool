@@ -97,6 +97,12 @@ def process_forecast_data(df):
     # Calculate accuracy metrics for overall data
     overall_metrics = calculate_forecast_accuracy_metrics(df['actual_sales'], df['forecast'])
     
+    # Add overall totals and averages
+    overall_metrics['total_actual'] = df['actual_sales'].sum()
+    overall_metrics['total_forecast'] = df['forecast'].sum()
+    overall_metrics['avg_actual'] = df['actual_sales'].mean()
+    overall_metrics['avg_forecast'] = df['forecast'].mean()
+    
     # Calculate metrics by month
     monthly_metrics = []
     for period in df['year_month'].unique():
@@ -105,6 +111,10 @@ def process_forecast_data(df):
         metrics['period'] = str(period)
         metrics['year'] = period.year
         metrics['month'] = period.month
+        metrics['total_actual'] = period_data['actual_sales'].sum()
+        metrics['total_forecast'] = period_data['forecast'].sum()
+        metrics['avg_actual'] = period_data['actual_sales'].mean()
+        metrics['avg_forecast'] = period_data['forecast'].mean()
         monthly_metrics.append(metrics)
     
     monthly_df = pd.DataFrame(monthly_metrics)
@@ -115,6 +125,10 @@ def process_forecast_data(df):
         location_data = df[df['location'] == location]
         metrics = calculate_forecast_accuracy_metrics(location_data['actual_sales'], location_data['forecast'])
         metrics['location'] = location
+        metrics['total_actual'] = location_data['actual_sales'].sum()
+        metrics['total_forecast'] = location_data['forecast'].sum()
+        metrics['avg_actual'] = location_data['actual_sales'].mean()
+        metrics['avg_forecast'] = location_data['forecast'].mean()
         location_metrics.append(metrics)
     
     location_df = pd.DataFrame(location_metrics)
@@ -125,6 +139,10 @@ def process_forecast_data(df):
         class_data = df[df['classification'] == classification]
         metrics = calculate_forecast_accuracy_metrics(class_data['actual_sales'], class_data['forecast'])
         metrics['classification'] = classification
+        metrics['total_actual'] = class_data['actual_sales'].sum()
+        metrics['total_forecast'] = class_data['forecast'].sum()
+        metrics['avg_actual'] = class_data['actual_sales'].mean()
+        metrics['avg_forecast'] = class_data['forecast'].mean()
         classification_metrics.append(metrics)
     
     classification_df = pd.DataFrame(classification_metrics)
@@ -135,6 +153,10 @@ def process_forecast_data(df):
         sku_data = df[df['sku'] == sku]
         metrics = calculate_forecast_accuracy_metrics(sku_data['actual_sales'], sku_data['forecast'])
         metrics['sku'] = sku
+        metrics['total_actual'] = sku_data['actual_sales'].sum()
+        metrics['total_forecast'] = sku_data['forecast'].sum()
+        metrics['avg_actual'] = sku_data['actual_sales'].mean()
+        metrics['avg_forecast'] = sku_data['forecast'].mean()
         sku_metrics.append(metrics)
     
     sku_df = pd.DataFrame(sku_metrics)
@@ -459,8 +481,33 @@ def run():
         # Display overall metrics
         st.subheader("🎯 Overall Forecast Accuracy")
         
+        # Actual vs Forecast Summary
+        st.markdown("### 📊 **Actual vs Forecast Summary**")
+        summary_col1, summary_col2, summary_col3, summary_col4 = st.columns(4)
+        
+        with summary_col1:
+            total_actual = results['overall']['total_actual']
+            st.metric("Total Actual Sales", f"{total_actual:,.0f}")
+        
+        with summary_col2:
+            total_forecast = results['overall']['total_forecast']
+            st.metric("Total Forecast", f"{total_forecast:,.0f}")
+        
+        with summary_col3:
+            variance = total_forecast - total_actual
+            variance_pct = (variance / total_actual * 100) if total_actual != 0 else 0
+            st.metric("Total Variance", f"{variance:,.0f}", delta=f"{variance_pct:+.1f}%")
+        
+        with summary_col4:
+            avg_actual = results['overall']['avg_actual']
+            avg_forecast = results['overall']['avg_forecast']
+            st.metric("Avg Actual", f"{avg_actual:.1f}")
+            st.caption(f"Avg Forecast: {avg_forecast:.1f}")
+        
+        st.markdown("---")
+        
         # Industry-Standard Accuracy Metrics (0-100% scale)
-        st.markdown("### 📊 **Industry-Standard Accuracy**")
+        st.markdown("### 🎯 **Industry-Standard Accuracy**")
         acc_col1, acc_col2, acc_col3 = st.columns(3)
         
         with acc_col1:
@@ -545,7 +592,16 @@ def run():
             # Monthly data table
             with st.expander("📊 Monthly Metrics Table", expanded=False):
                 monthly_display = results['monthly'].copy()
-                monthly_display = monthly_display.round(2)
+                
+                # Reorder columns to show actual/forecast first
+                cols = ['period', 'total_actual', 'total_forecast', 'avg_actual', 'avg_forecast',
+                       'forecast_accuracy', 'weighted_accuracy', 'bias', 'mae', 'mape', 'rmse', 'tracking_signal', 'count']
+                monthly_display = monthly_display[[col for col in cols if col in monthly_display.columns]]
+                
+                # Round numeric columns
+                numeric_cols = monthly_display.select_dtypes(include=[np.number]).columns
+                monthly_display[numeric_cols] = monthly_display[numeric_cols].round(2)
+                
                 st.dataframe(monthly_display, use_container_width=True)
         
         # Comparison by dimensions
@@ -555,36 +611,115 @@ def run():
         # Detailed breakdowns
         st.subheader("📋 Detailed Analysis")
         
-        tab1, tab2, tab3 = st.tabs(["By Location", "By Classification", "By SKU"])
+        tab1, tab2, tab3, tab4 = st.tabs(["By Location", "By Classification", "By SKU", "Raw Data"])
         
         with tab1:
             if not results['location'].empty:
-                location_df = results['location'].round(2)
+                st.markdown("#### 📍 **Performance by Location**")
+                location_df = results['location'].copy()
+                
+                # Reorder columns to show actual/forecast first
+                cols = ['location', 'total_actual', 'total_forecast', 'avg_actual', 'avg_forecast', 
+                       'forecast_accuracy', 'weighted_accuracy', 'bias', 'mae', 'mape', 'rmse', 'tracking_signal', 'count']
+                location_df = location_df[[col for col in cols if col in location_df.columns]]
+                
+                # Round numeric columns
+                numeric_cols = location_df.select_dtypes(include=[np.number]).columns
+                location_df[numeric_cols] = location_df[numeric_cols].round(2)
+                
                 st.dataframe(location_df, use_container_width=True)
         
         with tab2:
             if not results['classification'].empty:
-                classification_df = results['classification'].round(2)
+                st.markdown("#### 🏷️ **Performance by Classification**")
+                classification_df = results['classification'].copy()
+                
+                # Reorder columns to show actual/forecast first
+                cols = ['classification', 'total_actual', 'total_forecast', 'avg_actual', 'avg_forecast',
+                       'forecast_accuracy', 'weighted_accuracy', 'bias', 'mae', 'mape', 'rmse', 'tracking_signal', 'count']
+                classification_df = classification_df[[col for col in cols if col in classification_df.columns]]
+                
+                # Round numeric columns
+                numeric_cols = classification_df.select_dtypes(include=[np.number]).columns
+                classification_df[numeric_cols] = classification_df[numeric_cols].round(2)
+                
                 st.dataframe(classification_df, use_container_width=True)
         
         with tab3:
             if not results['sku'].empty:
-                sku_df = results['sku'].round(2).sort_values('mape')
+                st.markdown("#### 📦 **Performance by SKU**")
+                sku_df = results['sku'].copy()
+                
+                # Reorder columns to show actual/forecast first
+                cols = ['sku', 'total_actual', 'total_forecast', 'avg_actual', 'avg_forecast',
+                       'forecast_accuracy', 'weighted_accuracy', 'bias', 'mae', 'mape', 'rmse', 'tracking_signal', 'count']
+                sku_df = sku_df[[col for col in cols if col in sku_df.columns]]
+                
+                # Round numeric columns
+                numeric_cols = sku_df.select_dtypes(include=[np.number]).columns
+                sku_df[numeric_cols] = sku_df[numeric_cols].round(2)
+                
+                # Sort by forecast accuracy (descending)
+                sku_df = sku_df.sort_values('forecast_accuracy', ascending=False)
                 
                 # Show top 10 best and worst performers
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.write("🏆 **Top 10 Best Performers (Lowest MAPE)**")
-                    st.dataframe(sku_df.head(10), use_container_width=True)
+                    st.write("🏆 **Top 10 Best Performers (Highest Accuracy)**")
+                    best_performers = sku_df.head(10)
+                    st.dataframe(best_performers, use_container_width=True)
                 
                 with col2:
-                    st.write("⚠️ **Top 10 Worst Performers (Highest MAPE)**")
-                    st.dataframe(sku_df.tail(10), use_container_width=True)
+                    st.write("⚠️ **Bottom 10 Performers (Lowest Accuracy)**")
+                    worst_performers = sku_df.tail(10)
+                    st.dataframe(worst_performers, use_container_width=True)
                 
-                # Full SKU table in expander
-                with st.expander("📊 All SKU Metrics", expanded=False):
+                # Full SKU table
+                with st.expander("📊 Complete SKU Analysis", expanded=False):
                     st.dataframe(sku_df, use_container_width=True)
+        
+        with tab4:
+            st.markdown("#### 📋 **Raw Data with Calculated Errors**")
+            raw_data = results['raw_data'].copy()
+            
+            # Add calculated fields
+            raw_data['error'] = raw_data['forecast'] - raw_data['actual_sales']
+            raw_data['abs_error'] = abs(raw_data['error'])
+            raw_data['pct_error'] = (raw_data['error'] / raw_data['actual_sales'] * 100).round(2)
+            raw_data['abs_pct_error'] = abs(raw_data['pct_error'])
+            
+            # Reorder columns
+            cols = ['date', 'sku', 'location', 'classification', 'actual_sales', 'forecast', 
+                   'error', 'abs_error', 'pct_error', 'abs_pct_error']
+            raw_data = raw_data[[col for col in cols if col in raw_data.columns]]
+            
+            # Round numeric columns
+            numeric_cols = raw_data.select_dtypes(include=[np.number]).columns
+            raw_data[numeric_cols] = raw_data[numeric_cols].round(2)
+            
+            # Show summary statistics
+            st.markdown("##### Summary Statistics")
+            summary_stats = pd.DataFrame({
+                'Metric': ['Count', 'Total Actual', 'Total Forecast', 'Avg Actual', 'Avg Forecast', 
+                          'Total Error', 'Avg Error', 'Avg Abs Error', 'Avg % Error'],
+                'Value': [
+                    len(raw_data),
+                    f"{raw_data['actual_sales'].sum():,.0f}",
+                    f"{raw_data['forecast'].sum():,.0f}",
+                    f"{raw_data['actual_sales'].mean():.2f}",
+                    f"{raw_data['forecast'].mean():.2f}",
+                    f"{raw_data['error'].sum():,.0f}",
+                    f"{raw_data['error'].mean():.2f}",
+                    f"{raw_data['abs_error'].mean():.2f}",
+                    f"{raw_data['abs_pct_error'].mean():.2f}%"
+                ]
+            })
+            st.dataframe(summary_stats, use_container_width=True)
+            
+            # Show raw data table
+            st.markdown("##### Detailed Records")
+            st.dataframe(raw_data, use_container_width=True)
         
         # Download results
         st.subheader("💾 Export Results")
