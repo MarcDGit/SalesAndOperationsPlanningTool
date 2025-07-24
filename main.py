@@ -33,11 +33,20 @@ def main():
     
     with open("sample_inventory_data.csv", "rb") as file:
         st.sidebar.download_button(
-            label="📋 Download Sample Data",
+            label="📋 Download Inventory Sample",
             data=file,
             file_name="sample_inventory_data.csv",
             mime="text/csv",
             help="Download sample inventory data to test the application"
+        )
+    
+    with open("sample_forecast_data.csv", "rb") as file:
+        st.sidebar.download_button(
+            label="📊 Download Forecast Sample",
+            data=file,
+            file_name="sample_forecast_data.csv",
+            mime="text/csv",
+            help="Download sample forecast data to test demand planning"
         )
 
     # Load selected module
