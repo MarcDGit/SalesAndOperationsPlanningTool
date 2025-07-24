@@ -1,6 +1,6 @@
 # 🏭 Supply Chain Inventory Planning & Optimization Tool
 
-A comprehensive web application for supply chain inventory planning with advanced analytics, outlier detection, and optimization capabilities.
+A comprehensive web application for supply chain inventory planning with advanced analytics, outlier detection, optimization capabilities, and forecast accuracy evaluation. The application features two main modules: **Inventory Planning** for stock optimization and **Demand Planning** for forecast accuracy analysis.
 
 ## 🚀 Features
 
@@ -36,23 +36,49 @@ A comprehensive web application for supply chain inventory planning with advance
 - **Visual Dashboards**: Interactive charts and pie charts for category distribution
 - **Strategic Insights**: Focus inventory efforts on high-value items
 
+### 📈 Demand Planning & Forecast Accuracy
+- **File Upload Support**: Excel (.xlsx, .xls) and CSV file uploads for forecast data
+- **Comprehensive Metrics**: Calculate Bias, MAE, MAPE, and RMSE accuracy metrics
+- **Time-Based Analysis**: Monthly trends and year-to-date performance tracking
+- **Multi-Dimensional Filtering**: Filter by SKU, location, classification, and date range
+- **Interactive Visualizations**: Plotly-based charts for trend analysis and comparisons
+- **Performance Benchmarking**: Industry-standard forecast accuracy evaluation
+
 ## 📋 Data Requirements
 
-### Required Columns
+### Inventory Planning Data
+#### Required Columns
 - `week`: Date in YYYY-MM-DD format (weekly time periods)
 - `sku`: Stock Keeping Unit identifier
 - `location`: Warehouse or location identifier  
 - `demand`: Numerical demand values
 
-### Optional Columns
+#### Optional Columns
 - `inventory`: Current inventory levels (enables advanced turnover analysis)
 
-### Sample Data Format
+#### Sample Data Format
 ```csv
 week,sku,location,demand,inventory
 2024-01-01,SKU001,Warehouse_A,150,500
 2024-01-08,SKU001,Warehouse_A,200,350
 2024-01-15,SKU001,Warehouse_A,180,170
+```
+
+### Demand Planning & Forecast Data
+#### Required Columns
+- `sku`: Product SKU identifier
+- `actual_sales`: Actual sales values
+- `forecast`: Forecasted sales values
+- `date`: Date in YYYY-MM-DD format
+- `location`: Store or location identifier
+- `classification`: Product classification/category
+
+#### Sample Data Format
+```csv
+sku,actual_sales,forecast,date,location,classification
+SKU_001,120.5,115.2,2024-01-01,Store_A,Category_A
+SKU_002,200.0,210.5,2024-01-01,Store_B,Category_B
+SKU_003,85.3,88.7,2024-01-01,Store_C,Category_A
 ```
 
 ## 🛠️ Installation & Setup
@@ -74,13 +100,25 @@ week,sku,location,demand,inventory
    ```
 4. **Access the application** in your browser at `http://localhost:8501`
 
+### Sample Data Files
+The application includes sample data files for testing:
+- `sample_inventory_data.csv`: Sample inventory planning data with demand and inventory levels
+- `sample_forecast_data.csv`: Sample forecast accuracy data with actual vs. forecast comparisons
+
 ## 📖 User Guide
 
 ### Getting Started
 
+#### For Inventory Planning:
 1. **Navigate to Inventory Planning**: Select "🏭 Inventory Planning" from the sidebar
 2. **Upload Your Data**: Go to "Data Upload & Overview" and upload your CSV/Excel file
 3. **Explore Analytics**: Use the different analysis types in the sidebar navigation
+
+#### For Demand Planning & Forecast Accuracy:
+1. **Navigate to Demand Planning**: Select "📈 Demand Planning" from the sidebar
+2. **Upload Forecast Data**: Upload your forecast data file (CSV or Excel format)
+3. **Analyze Accuracy**: Review comprehensive forecast accuracy metrics and trends
+4. **Filter & Drill Down**: Use filters to analyze specific segments or time periods
 
 ### Analysis Workflow
 
@@ -112,6 +150,13 @@ week,sku,location,demand,inventory
 - Focus on A-category items for maximum impact
 - Use insights for strategic inventory planning
 
+#### 6. Demand Planning & Forecast Accuracy Evaluation
+- Upload forecast data with actual vs. predicted values
+- Calculate comprehensive accuracy metrics (Bias, MAE, MAPE, RMSE)
+- Analyze monthly trends and year-to-date performance
+- Filter by SKU, location, or product classification
+- Export accuracy reports and visualizations
+
 ## 🎯 Key Metrics & Calculations
 
 ### Safety Stock Formula
@@ -135,6 +180,32 @@ Days on Hand = 365 / (Turnover Ratio × 52)
 - **B Items**: Next 15% of demand value (medium priority)  
 - **C Items**: Bottom 5% of demand value (low priority)
 
+### Forecast Accuracy Metrics
+
+#### Bias (Mean Error)
+```
+Bias = Average of (Forecast - Actual)
+```
+- **Interpretation**: Positive values indicate over-forecasting, negative values indicate under-forecasting
+
+#### MAE (Mean Absolute Error)
+```
+MAE = Average of |Forecast - Actual|
+```
+- **Interpretation**: Lower values indicate better accuracy (same unit as sales data)
+
+#### MAPE (Mean Absolute Percentage Error)
+```
+MAPE = Average of |Forecast - Actual| / |Actual| × 100
+```
+- **Interpretation**: Expressed as percentage; <10% excellent, 10-20% good
+
+#### RMSE (Root Mean Square Error)
+```
+RMSE = √(Average of (Forecast - Actual)²)
+```
+- **Interpretation**: Penalizes large errors more heavily; lower values are better
+
 ## 🔧 Technical Architecture
 
 ### Built With
@@ -145,11 +216,14 @@ Days on Hand = 365 / (Turnover Ratio × 52)
 - **Scikit-learn**: Machine learning algorithms
 - **SciPy**: Statistical functions
 - **Statsmodels**: Time series analysis
+- **OpenPyXL**: Excel file processing for forecast data uploads
 
 ### Key Components
 - `InventoryOptimizer`: Core optimization and analysis engine
 - `load_and_process_data()`: Data ingestion and preprocessing
 - `validate_data_structure()`: Data validation and error handling
+- `calculate_forecast_accuracy_metrics()`: Forecast accuracy calculations
+- `process_forecast_data()`: Forecast data processing and analysis
 - Interactive Streamlit interface with session state management
 
 ## 💡 Tips & Best Practices
@@ -172,16 +246,26 @@ Days on Hand = 365 / (Turnover Ratio × 52)
 - Use filters to analyze specific SKUs or locations
 - Export results for offline analysis and reporting
 
+### Forecast Accuracy Best Practices
+- Ensure forecast data includes at least 3 months of historical comparisons
+- Use consistent SKU naming between actual and forecast data
+- Regular monitoring of accuracy trends helps identify forecasting issues
+- Focus on MAPE for percentage-based comparisons across different SKUs
+- Use bias metrics to identify systematic over or under-forecasting patterns
+
 ## 🤝 Support & Contributing
 
 For questions, issues, or feature requests, please refer to the application's help sections or contact your system administrator.
 
 ### Feature Roadmap
-- [ ] Forecasting integration
+- [x] **Forecast accuracy evaluation** ✅ (Completed)
+- [x] **Multi-format data upload support** ✅ (Completed)
 - [ ] Multi-echelon optimization
 - [ ] Cost optimization algorithms
 - [ ] Integration with ERP systems
 - [ ] Advanced ML models for demand prediction
+- [ ] Automated forecast bias correction
+- [ ] Real-time forecast accuracy monitoring
 
 ## 📄 License
 
