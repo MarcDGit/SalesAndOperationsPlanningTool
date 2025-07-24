@@ -38,11 +38,12 @@ A comprehensive web application for supply chain inventory planning with advance
 
 ### 📈 Demand Planning & Forecast Accuracy
 - **File Upload Support**: Excel (.xlsx, .xls) and CSV file uploads for forecast data
-- **Comprehensive Metrics**: Calculate Bias, MAE, MAPE, and RMSE accuracy metrics
-- **Time-Based Analysis**: Monthly trends and year-to-date performance tracking
+- **Comprehensive Metrics**: Calculate Bias, MAE, MAPE, RMSE, and industry-standard accuracy percentages
+- **Industry-Standard Accuracy**: Forecast Accuracy (0-100%), Weighted Accuracy, and Tracking Signal
+- **Time-Based Analysis**: Monthly trends and year-to-date performance tracking with accuracy benchmarks
 - **Multi-Dimensional Filtering**: Filter by SKU, location, classification, and date range
-- **Interactive Visualizations**: Plotly-based charts for trend analysis and comparisons
-- **Performance Benchmarking**: Industry-standard forecast accuracy evaluation
+- **Interactive Visualizations**: Plotly-based charts for trend analysis, comparisons, and accuracy scales
+- **Performance Benchmarking**: Industry-standard forecast accuracy evaluation with quality thresholds
 
 ## 📋 Data Requirements
 
@@ -182,29 +183,55 @@ Days on Hand = 365 / (Turnover Ratio × 52)
 
 ### Forecast Accuracy Metrics
 
-#### Bias (Mean Error)
+#### Traditional Metrics
+
+##### Bias (Mean Error)
 ```
 Bias = Average of (Forecast - Actual)
 ```
 - **Interpretation**: Positive values indicate over-forecasting, negative values indicate under-forecasting
 
-#### MAE (Mean Absolute Error)
+##### MAE (Mean Absolute Error)
 ```
 MAE = Average of |Forecast - Actual|
 ```
 - **Interpretation**: Lower values indicate better accuracy (same unit as sales data)
 
-#### MAPE (Mean Absolute Percentage Error)
+##### MAPE (Mean Absolute Percentage Error)
 ```
 MAPE = Average of |Forecast - Actual| / |Actual| × 100
 ```
 - **Interpretation**: Expressed as percentage; <10% excellent, 10-20% good
 
-#### RMSE (Root Mean Square Error)
+##### RMSE (Root Mean Square Error)
 ```
 RMSE = √(Average of (Forecast - Actual)²)
 ```
 - **Interpretation**: Penalizes large errors more heavily; lower values are better
+
+#### Industry-Standard Accuracy Metrics (0-100% Scale)
+
+##### Forecast Accuracy
+```
+Forecast Accuracy = 100% - MAPE
+```
+- **Interpretation**: Direct accuracy percentage; ≥90% excellent, 80-90% good, <80% needs improvement
+- **Industry Standard**: Most widely used accuracy metric in supply chain and forecasting
+
+##### Weighted Accuracy
+```
+Weighted Accuracy = 100% - (Average of Capped Relative Errors × 100)
+```
+- **Interpretation**: Sophisticated accuracy measure that caps extreme outliers at 200%
+- **Usage**: More robust than standard accuracy for datasets with occasional large errors
+
+##### Tracking Signal
+```
+Tracking Signal = Bias / MAE
+```
+- **Interpretation**: Bias detection metric; typical acceptable range is -4 to +4
+- **Industry Standard**: Used to identify systematic forecasting bias
+- **Thresholds**: <2 in control, 2-4 monitor, ≥4 out of control
 
 ## 🔧 Technical Architecture
 
