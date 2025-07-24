@@ -11,14 +11,14 @@ warnings.filterwarnings('ignore')
 
 def calculate_forecast_accuracy_metrics(actual, forecast):
     """
-    Calculate forecast accuracy metrics: Bias, MAE, MAPE, RMSE
+    Calculate comprehensive forecast accuracy metrics including industry-standard accuracy percentages
     
     Parameters:
     actual (array-like): Actual sales values
     forecast (array-like): Forecasted values
     
     Returns:
-    dict: Dictionary containing all accuracy metrics
+    dict: Dictionary containing all accuracy metrics including 0-100% accuracy scales
     """
     actual = np.array(actual)
     forecast = np.array(forecast)
@@ -34,6 +34,9 @@ def calculate_forecast_accuracy_metrics(actual, forecast):
             'mae': np.nan,
             'mape': np.nan,
             'rmse': np.nan,
+            'forecast_accuracy': np.nan,
+            'weighted_accuracy': np.nan,
+            'tracking_signal': np.nan,
             'count': 0
         }
     
@@ -52,11 +55,30 @@ def calculate_forecast_accuracy_metrics(actual, forecast):
     # RMSE (Root Mean Square Error)
     rmse = np.sqrt(np.mean(error ** 2))
     
+    # Industry-Standard Accuracy Metrics (0-100% scale)
+    
+    # 1. Forecast Accuracy (100% - MAPE) - Most common industry standard
+    forecast_accuracy = max(0, 100 - mape)
+    
+    # 2. Weighted Accuracy - Based on relative error magnitude
+    # Uses a more sophisticated formula that considers the distribution of errors
+    relative_errors = np.abs(error / np.where(actual == 0, 1, actual))
+    # Cap individual errors at 200% to prevent extreme outliers from dominating
+    capped_relative_errors = np.minimum(relative_errors, 2.0)
+    weighted_accuracy = max(0, 100 - (np.mean(capped_relative_errors) * 100))
+    
+    # 3. Tracking Signal - Bias to MAE ratio (industry standard for bias detection)
+    # Typical acceptable range is -4 to +4
+    tracking_signal = bias / mae if mae != 0 else 0
+    
     return {
         'bias': bias,
         'mae': mae,
         'mape': mape,
         'rmse': rmse,
+        'forecast_accuracy': forecast_accuracy,  # 0-100% scale
+        'weighted_accuracy': weighted_accuracy,   # 0-100% scale  
+        'tracking_signal': tracking_signal,       # -∞ to +∞ (typical: -4 to +4)
         'count': len(actual)
     }
 
@@ -179,6 +201,46 @@ def plot_accuracy_trends(monthly_df):
     # Sort by period
     monthly_df = monthly_df.sort_values('period')
     
+    # First, create accuracy percentage trends chart
+    st.subheader("📈 Accuracy Trends (0-100% Scale)")
+    
+    fig_acc = go.Figure()
+    
+    fig_acc.add_trace(
+        go.Scatter(x=monthly_df['period'], y=monthly_df['forecast_accuracy'],
+                  mode='lines+markers', name='Forecast Accuracy (%)',
+                  line=dict(color='#2E8B57', width=3),
+                  marker=dict(size=8))
+    )
+    
+    fig_acc.add_trace(
+        go.Scatter(x=monthly_df['period'], y=monthly_df['weighted_accuracy'],
+                  mode='lines+markers', name='Weighted Accuracy (%)',
+                  line=dict(color='#4682B4', width=3),
+                  marker=dict(size=8))
+    )
+    
+    # Add benchmark lines
+    fig_acc.add_hline(y=90, line_dash="dash", line_color="green", 
+                     annotation_text="Excellent (90%)")
+    fig_acc.add_hline(y=80, line_dash="dash", line_color="orange", 
+                     annotation_text="Good (80%)")
+    
+    fig_acc.update_layout(
+        height=400,
+        title_text="Industry-Standard Accuracy Metrics Over Time",
+        yaxis_title="Accuracy (%)",
+        yaxis=dict(range=[0, 100]),
+        xaxis_title="Period",
+        showlegend=True
+    )
+    
+    fig_acc.update_xaxes(tickangle=45)
+    st.plotly_chart(fig_acc, use_container_width=True)
+    
+    # Traditional metrics chart
+    st.subheader("📊 Traditional Metrics Trends")
+    
     # Create subplots
     fig = make_subplots(
         rows=2, cols=2,
@@ -232,30 +294,58 @@ def plot_accuracy_comparison(results):
     col1, col2 = st.columns(2)
     
     with col1:
-        # Location comparison
+        # Location comparison - Traditional Metrics
         if not results['location'].empty:
             fig_location = px.bar(
                 results['location'], 
                 x='location', 
                 y=['bias', 'mae', 'mape', 'rmse'],
-                title="Forecast Accuracy by Location",
+                title="Traditional Metrics by Location",
                 barmode='group'
             )
             fig_location.update_layout(height=400)
             st.plotly_chart(fig_location, use_container_width=True)
+            
+        # Location comparison - Accuracy Percentages
+        if not results['location'].empty:
+            fig_location_acc = px.bar(
+                results['location'], 
+                x='location', 
+                y=['forecast_accuracy', 'weighted_accuracy'],
+                title="Forecast Accuracy % by Location",
+                barmode='group',
+                color_discrete_sequence=['#2E8B57', '#4682B4']
+            )
+            fig_location_acc.update_layout(height=400, yaxis_title="Accuracy (%)")
+            fig_location_acc.update_yaxes(range=[0, 100])
+            st.plotly_chart(fig_location_acc, use_container_width=True)
     
     with col2:
-        # Classification comparison
+        # Classification comparison - Traditional Metrics
         if not results['classification'].empty:
             fig_class = px.bar(
                 results['classification'], 
                 x='classification', 
                 y=['bias', 'mae', 'mape', 'rmse'],
-                title="Forecast Accuracy by Classification",
+                title="Traditional Metrics by Classification",
                 barmode='group'
             )
             fig_class.update_layout(height=400)
             st.plotly_chart(fig_class, use_container_width=True)
+            
+        # Classification comparison - Accuracy Percentages
+        if not results['classification'].empty:
+            fig_class_acc = px.bar(
+                results['classification'], 
+                x='classification', 
+                y=['forecast_accuracy', 'weighted_accuracy'],
+                title="Forecast Accuracy % by Classification",
+                barmode='group',
+                color_discrete_sequence=['#2E8B57', '#4682B4']
+            )
+            fig_class_acc.update_layout(height=400, yaxis_title="Accuracy (%)")
+            fig_class_acc.update_yaxes(range=[0, 100])
+            st.plotly_chart(fig_class_acc, use_container_width=True)
 
 def display_ytd_summary(monthly_df):
     """
@@ -369,6 +459,44 @@ def run():
         # Display overall metrics
         st.subheader("🎯 Overall Forecast Accuracy")
         
+        # Industry-Standard Accuracy Metrics (0-100% scale)
+        st.markdown("### 📊 **Industry-Standard Accuracy**")
+        acc_col1, acc_col2, acc_col3 = st.columns(3)
+        
+        with acc_col1:
+            forecast_acc = results['overall']['forecast_accuracy']
+            acc_color = "normal" if forecast_acc >= 80 else "inverse"
+            st.metric("Forecast Accuracy", f"{forecast_acc:.1f}%", delta=None)
+            if forecast_acc >= 90:
+                st.caption("🟢 Excellent (≥90%)")
+            elif forecast_acc >= 80:
+                st.caption("🟡 Good (80-90%)")
+            else:
+                st.caption("🔴 Needs improvement (<80%)")
+        
+        with acc_col2:
+            weighted_acc = results['overall']['weighted_accuracy']
+            st.metric("Weighted Accuracy", f"{weighted_acc:.1f}%")
+            if weighted_acc >= 85:
+                st.caption("🟢 Excellent")
+            elif weighted_acc >= 70:
+                st.caption("🟡 Good")
+            else:
+                st.caption("🔴 Needs improvement")
+        
+        with acc_col3:
+            tracking_signal = results['overall']['tracking_signal']
+            ts_color = "normal" if abs(tracking_signal) < 4 else "inverse"
+            st.metric("Tracking Signal", f"{tracking_signal:.2f}")
+            if abs(tracking_signal) < 2:
+                st.caption("🟢 In control (<2)")
+            elif abs(tracking_signal) < 4:
+                st.caption("🟡 Monitor (2-4)")
+            else:
+                st.caption("🔴 Out of control (≥4)")
+        
+        st.markdown("---")
+        st.markdown("### 📈 **Traditional Metrics**")
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
