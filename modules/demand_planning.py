@@ -152,7 +152,9 @@ def create_sample_data():
         
         # Generate realistic sales and forecast data
         base_demand = np.random.uniform(50, 500)
-        seasonal_factor = 1 + 0.3 * np.sin(2 * np.pi * date.dayofyear / 365)
+        # Convert numpy datetime64 to pandas datetime to access dayofyear
+        date_pd = pd.to_datetime(date)
+        seasonal_factor = 1 + 0.3 * np.sin(2 * np.pi * date_pd.dayofyear / 365)
         actual_sales = max(0, base_demand * seasonal_factor + np.random.normal(0, base_demand * 0.1))
         
         # Forecast with some error
@@ -163,7 +165,7 @@ def create_sample_data():
             'sku': sku,
             'actual_sales': round(actual_sales, 2),
             'forecast': round(forecast, 2),
-            'date': date.strftime('%Y-%m-%d'),
+            'date': date_pd.strftime('%Y-%m-%d'),
             'location': location,
             'classification': classification
         })
