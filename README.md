@@ -1,86 +1,124 @@
-# 🏭 Supply Chain Inventory Planning & Optimization Tool
+# 🏭 Supply Chain Planning Suite
 
-A comprehensive web application for supply chain inventory planning with advanced analytics, outlier detection, optimization capabilities, and forecast accuracy evaluation. The application features two main modules: **Inventory Planning** for stock optimization and **Demand Planning** for forecast accuracy analysis.
+A comprehensive web application for end-to-end supply chain planning with advanced analytics, optimization capabilities, and real-time execution monitoring. The application features six integrated modules: **Inventory Planning**, **Demand Planning**, **Supply Planning**, **Financial Planning**, **S&OP (Sales & Operations Planning)**, and **S&OE (Sales & Operations Execution)**.
 
-## 🚀 Features
+## 🚀 Features Overview
 
 ### 📤 Data Upload & Processing
-- **Multi-format Support**: Upload data via CSV or Excel files
-- **Flexible Schema**: Supports time series data with week, SKU, location, demand, and inventory columns
+- **Multi-format Support**: Upload data via CSV or Excel files across all modules
+- **Flexible Schema**: Supports various data structures for different planning domains
 - **Data Validation**: Automatic validation of required columns and data structure
 - **Real-time Preview**: Instant data overview with statistics and visualizations
 
-### 🔍 Advanced Outlier Detection
-- **Multiple Detection Methods**:
-  - **Isolation Forest**: Machine learning-based anomaly detection
-  - **Z-Score Method**: Statistical outlier detection (>3 standard deviations)
-  - **IQR Method**: Interquartile range-based detection
-- **Interactive Visualizations**: Highlight outliers in time series plots
-- **Detailed Analysis**: Export outlier data for further investigation
+### 🔍 Advanced Analytics & Optimization
+- **Multiple Detection Methods**: Outlier detection, trend analysis, and pattern recognition
+- **Interactive Visualizations**: Comprehensive dashboards with Plotly-based charts
+- **Machine Learning**: AI-powered forecasting and optimization algorithms
+- **Industry Best Practices**: Implementation of proven supply chain methodologies
 
-### ⚙️ Inventory Optimization
+## 📋 Module Details
+
+### 🏭 Inventory Planning
+Advanced inventory optimization with outlier detection and parameter proposals.
+
+**Key Features:**
 - **Safety Stock Calculation**: Dynamic safety stock based on demand variability and service levels
 - **Reorder Point Optimization**: Calculate optimal reorder points considering lead times
 - **Inventory Turnover Analysis**: Comprehensive turnover metrics and days on hand calculations
-- **Service Level Optimization**: Compare different service levels and their inventory impact
+- **ABC Analysis**: Pareto classification for strategic inventory focus
+- **Outlier Detection**: Isolation Forest, Z-Score, and IQR methods
 
-### 💡 Intelligent Parameter Proposals
-- **Automated Recommendations**: System-generated inventory parameter suggestions
-- **Service Level Impact Analysis**: Visualize how different service levels affect inventory requirements
-- **Seasonal Decomposition**: Advanced time series analysis for seasonal patterns
-- **Demand Pattern Recognition**: Identify trends, seasonality, and residual patterns
-
-### 📊 ABC Analysis
-- **Pareto Classification**: Automatic ABC categorization based on demand value
-- **Category Analytics**: Detailed analysis by product category
-- **Visual Dashboards**: Interactive charts and pie charts for category distribution
-- **Strategic Insights**: Focus inventory efforts on high-value items
-
-### 📈 Demand Planning & Forecast Accuracy
-- **File Upload Support**: Excel (.xlsx, .xls) and CSV file uploads for forecast data
-- **Comprehensive Metrics**: Calculate Bias, MAE, MAPE, RMSE, and industry-standard accuracy percentages
-- **Industry-Standard Accuracy**: Forecast Accuracy (0-100%), Weighted Accuracy, and Tracking Signal
-- **Time-Based Analysis**: Monthly trends and year-to-date performance tracking with accuracy benchmarks
-- **Multi-Dimensional Filtering**: Filter by SKU, location, classification, and date range
-- **Interactive Visualizations**: Plotly-based charts for trend analysis, comparisons, and accuracy scales
-- **Performance Benchmarking**: Industry-standard forecast accuracy evaluation with quality thresholds
-
-## 📋 Data Requirements
-
-### Inventory Planning Data
-#### Required Columns
-- `week`: Date in YYYY-MM-DD format (weekly time periods)
-- `sku`: Stock Keeping Unit identifier
-- `location`: Warehouse or location identifier  
-- `demand`: Numerical demand values
-
-#### Optional Columns
-- `inventory`: Current inventory levels (enables advanced turnover analysis)
-
-#### Sample Data Format
+**Data Requirements:**
 ```csv
 week,sku,location,demand,inventory
 2024-01-01,SKU001,Warehouse_A,150,500
 2024-01-08,SKU001,Warehouse_A,200,350
-2024-01-15,SKU001,Warehouse_A,180,170
 ```
 
-### Demand Planning & Forecast Data
-#### Required Columns
-- `sku`: Product SKU identifier
-- `actual_sales`: Actual sales values
-- `forecast`: Forecasted sales values
-- `date`: Date in YYYY-MM-DD format
-- `location`: Store or location identifier
-- `classification`: Product classification/category
+### 📊 Demand Planning
+Comprehensive forecast accuracy evaluation and demand analytics.
 
-#### Sample Data Format
+**Key Features:**
+- **Forecast Accuracy Metrics**: Bias, MAE, MAPE, RMSE, industry-standard accuracy percentages
+- **Time-Based Analysis**: Monthly trends and year-to-date performance tracking
+- **Multi-Dimensional Filtering**: Filter by SKU, location, classification, and date range
+- **Performance Benchmarking**: Industry-standard forecast accuracy evaluation
+
+**Data Requirements:**
 ```csv
 sku,actual_sales,forecast,date,location,classification
 SKU_001,120.5,115.2,2024-01-01,Store_A,Category_A
-SKU_002,200.0,210.5,2024-01-01,Store_B,Category_B
-SKU_003,85.3,88.7,2024-01-01,Store_C,Category_A
 ```
+
+### 🚚 Supply Planning
+Comprehensive supply chain planning with capacity optimization and procurement management.
+
+**Key Features:**
+- **Capacity Planning**: Calculate capacity requirements and utilization analysis
+- **Procurement Optimization**: Supplier selection and cost optimization
+- **Master Production Schedule (MPS)**: Production planning and scheduling
+- **Supplier Analysis**: Performance evaluation and risk assessment
+- **Supply Chain Metrics**: KPI monitoring and risk management
+
+**Key Capabilities:**
+- Capacity requirements planning with lead time considerations
+- Multi-supplier procurement optimization based on cost, quality, and capacity
+- Production scheduling with inventory balancing
+- Supplier performance scoring and comparison
+- Supply chain risk assessment and mitigation recommendations
+
+### 💰 Financial Planning
+Advanced financial planning with budget analysis and profitability optimization.
+
+**Key Features:**
+- **Budget Variance Analysis**: Plan vs actual performance tracking
+- **Cash Flow Forecasting**: Predictive cash flow modeling with seasonality
+- **Profitability Analysis**: Product-level margin analysis and optimization
+- **Cost Structure Analysis**: Pareto analysis and cost optimization opportunities
+- **Financial KPIs**: Comprehensive financial performance dashboards
+
+**Key Capabilities:**
+- Automated budget variance calculation and analysis
+- Trend-based cash flow forecasting with seasonal adjustments
+- Product profitability tracking and margin analysis
+- Cost category optimization using 80/20 rule
+- Financial performance dashboards with multiple metrics
+
+### 📋 S&OP (Sales & Operations Planning)
+Integrated planning with gap analysis, scenario planning, and consensus building.
+
+**Key Features:**
+- **Integrated Plan Review**: Demand, supply, and financial plan alignment
+- **Gap Analysis**: Comprehensive variance analysis between plans
+- **Scenario Planning**: Multiple scenario modeling with risk assessment
+- **Consensus Building**: Stakeholder alignment and variability analysis
+- **Executive Dashboard**: High-level KPIs and critical issue identification
+
+**Key Capabilities:**
+- Cross-functional plan integration and balance assessment
+- Automated gap identification and action plan generation
+- Multiple scenario analysis (optimistic, pessimistic, baseline)
+- Stakeholder consensus measurement and improvement recommendations
+- Executive-level reporting with critical issue flagging
+
+### ⚡ S&OE (Sales & Operations Execution)
+Real-time execution monitoring and performance management.
+
+**Key Features:**
+- **Real-time Dashboard**: Live execution performance monitoring
+- **Execution Performance**: Plan vs actual tracking with variance analysis
+- **KPI Monitoring**: Real-time KPI performance against targets
+- **Issue Tracking**: Operational issue management and resolution tracking
+- **Corrective Actions**: Automated action plan generation
+- **Weekly Review**: Comprehensive weekly performance review
+
+**Key Capabilities:**
+- Real-time plan vs actual performance tracking
+- KPI achievement monitoring with trend analysis
+- Operational issue lifecycle management
+- Automated corrective action recommendations
+- Week-over-week performance comparison
+- Executive-level execution dashboards
 
 ## 🛠️ Installation & Setup
 
@@ -102,136 +140,84 @@ SKU_003,85.3,88.7,2024-01-01,Store_C,Category_A
 4. **Access the application** in your browser at `http://localhost:8501`
 
 ### Sample Data Files
-The application includes sample data files for testing:
-- `sample_inventory_data.csv`: Sample inventory planning data with demand and inventory levels
-- `sample_forecast_data.csv`: Sample forecast accuracy data with actual vs. forecast comparisons
+The application includes sample data files for testing all modules:
+- `sample_inventory_data.csv`: Inventory planning data
+- `sample_forecast_data.csv`: Demand planning data
+- Each module generates its own sample data for demonstration
 
 ## 📖 User Guide
 
 ### Getting Started
 
-#### For Inventory Planning:
-1. **Navigate to Inventory Planning**: Select "🏭 Inventory Planning" from the sidebar
-2. **Upload Your Data**: Go to "Data Upload & Overview" and upload your CSV/Excel file
-3. **Explore Analytics**: Use the different analysis types in the sidebar navigation
+#### Module Navigation:
+1. **Select Module**: Choose from the sidebar navigation
+2. **Upload Data**: Use sample data or upload your own files
+3. **Explore Analytics**: Navigate through different analysis types
+4. **Download Results**: Export analysis results and sample data
 
-#### For Demand Planning & Forecast Accuracy:
-1. **Navigate to Demand Planning**: Select "📈 Demand Planning" from the sidebar
-2. **Upload Forecast Data**: Upload your forecast data file (CSV or Excel format)
-3. **Analyze Accuracy**: Review comprehensive forecast accuracy metrics and trends
-4. **Filter & Drill Down**: Use filters to analyze specific segments or time periods
+### Analysis Workflow by Module
 
-### Analysis Workflow
+#### Inventory Planning:
+1. Data Upload & Overview → Outlier Detection → Inventory Optimization → Parameter Proposals → ABC Analysis
 
-#### 1. Data Upload & Overview
-- Upload your inventory data file
-- Review data statistics and time series visualization
-- Validate data structure and completeness
+#### Demand Planning:
+1. Data Upload → Accuracy Metrics Calculation → Trend Analysis → Filtering & Drill-down
 
-#### 2. Outlier Detection
-- Choose detection method (Isolation Forest recommended for most cases)
-- Review detected outliers in tabular and visual format
-- Export outlier data for further investigation
+#### Supply Planning:
+1. Data Overview → Capacity Planning → Procurement Optimization → MPS → Supplier Analysis
 
-#### 3. Inventory Optimization
-- Set service level (90-99%) and lead time parameters
-- Calculate safety stock requirements
-- Determine optimal reorder points
-- Analyze inventory turnover metrics
+#### Financial Planning:
+1. Data Overview → Budget Variance → Cash Flow Forecasting → Profitability Analysis → Cost Analysis
 
-#### 4. Parameter Proposals
-- Review system-generated parameter recommendations
-- Compare different service level scenarios
-- Analyze seasonal demand patterns
-- Export recommendations for implementation
+#### S&OP:
+1. Plan Review → Gap Analysis → Scenario Planning → Consensus Building → Executive Dashboard
 
-#### 5. ABC Analysis
-- Perform Pareto analysis on your SKUs
-- Review category classifications
-- Focus on A-category items for maximum impact
-- Use insights for strategic inventory planning
-
-#### 6. Demand Planning & Forecast Accuracy Evaluation
-- Upload forecast data with actual vs. predicted values
-- Calculate comprehensive accuracy metrics (Bias, MAE, MAPE, RMSE)
-- Analyze monthly trends and year-to-date performance
-- Filter by SKU, location, or product classification
-- Export accuracy reports and visualizations
+#### S&OE:
+1. Real-time Dashboard → Execution Performance → KPI Monitoring → Issue Tracking → Corrective Actions
 
 ## 🎯 Key Metrics & Calculations
 
-### Safety Stock Formula
+### Inventory Metrics
 ```
 Safety Stock = Z-score(Service Level) × Demand Standard Deviation
-```
-
-### Reorder Point Formula
-```
 Reorder Point = (Average Demand × Lead Time) + Safety Stock
-```
-
-### Inventory Turnover
-```
 Turnover Ratio = Total Demand / Average Inventory
-Days on Hand = 365 / (Turnover Ratio × 52)
 ```
-
-### ABC Classification
-- **A Items**: Top 80% of demand value (high priority)
-- **B Items**: Next 15% of demand value (medium priority)  
-- **C Items**: Bottom 5% of demand value (low priority)
 
 ### Forecast Accuracy Metrics
-
-#### Traditional Metrics
-
-##### Bias (Mean Error)
 ```
 Bias = Average of (Forecast - Actual)
-```
-- **Interpretation**: Positive values indicate over-forecasting, negative values indicate under-forecasting
-
-##### MAE (Mean Absolute Error)
-```
 MAE = Average of |Forecast - Actual|
-```
-- **Interpretation**: Lower values indicate better accuracy (same unit as sales data)
-
-##### MAPE (Mean Absolute Percentage Error)
-```
 MAPE = Average of |Forecast - Actual| / |Actual| × 100
-```
-- **Interpretation**: Expressed as percentage; <10% excellent, 10-20% good
-
-##### RMSE (Root Mean Square Error)
-```
-RMSE = √(Average of (Forecast - Actual)²)
-```
-- **Interpretation**: Penalizes large errors more heavily; lower values are better
-
-#### Industry-Standard Accuracy Metrics (0-100% Scale)
-
-##### Forecast Accuracy
-```
 Forecast Accuracy = 100% - MAPE
 ```
-- **Interpretation**: Direct accuracy percentage; ≥90% excellent, 80-90% good, <80% needs improvement
-- **Industry Standard**: Most widely used accuracy metric in supply chain and forecasting
 
-##### Weighted Accuracy
+### Supply Chain Metrics
 ```
-Weighted Accuracy = 100% - (Average of Capped Relative Errors × 100)
+Capacity Utilization = Required Capacity / Available Capacity × 100
+Supplier Score = Weighted Average of (Cost, Quality, Lead Time, Capacity)
 ```
-- **Interpretation**: Sophisticated accuracy measure that caps extreme outliers at 200%
-- **Usage**: More robust than standard accuracy for datasets with occasional large errors
 
-##### Tracking Signal
+### Financial Metrics
 ```
-Tracking Signal = Bias / MAE
+Gross Margin = (Revenue - COGS) / Revenue × 100
+Budget Variance = Actual - Budget
+Cash Flow Forecast = Historical Trend + Seasonal Adjustment
 ```
-- **Interpretation**: Bias detection metric; typical acceptable range is -4 to +4
-- **Industry Standard**: Used to identify systematic forecasting bias
-- **Thresholds**: <2 in control, 2-4 monitor, ≥4 out of control
+
+### S&OP Metrics
+```
+Plan Balance Score = % of periods with <5% volume gap
+Volume Gap = Supply - Demand
+Consensus Level = Based on coefficient of variation across stakeholders
+```
+
+### S&OE Metrics
+```
+Execution Score = 100 - |Variance %|
+KPI Achievement = Actual / Target × 100
+Issue Resolution Rate = Resolved Issues / Total Issues × 100
+```
 
 ## 🔧 Technical Architecture
 
@@ -243,56 +229,95 @@ Tracking Signal = Bias / MAE
 - **Scikit-learn**: Machine learning algorithms
 - **SciPy**: Statistical functions
 - **Statsmodels**: Time series analysis
-- **OpenPyXL**: Excel file processing for forecast data uploads
+- **OpenPyXL**: Excel file processing
 
 ### Key Components
-- `InventoryOptimizer`: Core optimization and analysis engine
-- `load_and_process_data()`: Data ingestion and preprocessing
-- `validate_data_structure()`: Data validation and error handling
-- `calculate_forecast_accuracy_metrics()`: Forecast accuracy calculations
-- `process_forecast_data()`: Forecast data processing and analysis
-- Interactive Streamlit interface with session state management
+- **Modular Architecture**: Six independent but integrated modules
+- **Class-based Design**: Separate planner classes for each domain
+- **Session State Management**: Streamlit session state for data persistence
+- **Error Handling**: Comprehensive error handling and validation
+- **Sample Data Generation**: Built-in sample data for all modules
 
-## 💡 Tips & Best Practices
+## 💡 Industry Best Practices
 
-### Data Preparation
-- Ensure weekly data consistency (same day of week for all entries)
-- Clean data before upload (remove null values, standardize formats)
-- Include at least 12 weeks of data for meaningful analysis
-- Use consistent SKU and location naming conventions
+### Supply Chain Planning
+- **Integrated Planning**: Cross-functional alignment across demand, supply, and financial plans
+- **Exception Management**: Automated gap identification and action planning
+- **Scenario Planning**: Multiple scenario analysis for risk management
+- **Real-time Monitoring**: Continuous execution tracking and performance management
 
-### Analysis Guidelines
-- Start with ABC analysis to prioritize efforts
-- Use Isolation Forest for initial outlier detection
-- Adjust service levels based on business criticality
-- Consider seasonal patterns when setting parameters
-- Regular monitoring and parameter adjustment recommended
+### Data Management
+- **Data Quality**: Automated validation and cleansing
+- **Standardization**: Consistent data formats across modules
+- **Scalability**: Designed for large datasets and multiple SKUs/locations
+- **Export Capabilities**: Results export for further analysis
 
 ### Performance Optimization
-- For large datasets (>10K records), consider data aggregation
-- Use filters to analyze specific SKUs or locations
-- Export results for offline analysis and reporting
+- **Efficient Algorithms**: Optimized calculations for large datasets
+- **Parallel Processing**: Where applicable for improved performance
+- **Memory Management**: Efficient data handling for large files
+- **Caching**: Streamlit caching for improved user experience
 
-### Forecast Accuracy Best Practices
-- Ensure forecast data includes at least 3 months of historical comparisons
-- Use consistent SKU naming between actual and forecast data
-- Regular monitoring of accuracy trends helps identify forecasting issues
-- Focus on MAPE for percentage-based comparisons across different SKUs
-- Use bias metrics to identify systematic over or under-forecasting patterns
+## 📊 Sample Data Structures
+
+### Inventory Planning Data
+```csv
+week,sku,location,demand,inventory
+2024-01-01,SKU001,Warehouse_A,150,500
+2024-01-08,SKU001,Warehouse_A,200,350
+```
+
+### Supply Planning Data
+```csv
+period,sku,location,demand,capacity,supplier,unit_cost
+2024-01,SKU001,Plant_A,1000,1200,Supplier_A,25.50
+```
+
+### Financial Planning Data
+```csv
+period,category,budget,actual,type
+2024-01,Sales Revenue,500000,485000,Budget
+```
+
+### S&OP Data
+```csv
+period,product_family,demand,supply,revenue,costs
+2024-01,Family_A,1000,950,50000,30000
+```
+
+### S&OE Data
+```csv
+period,metric,plan,actual,target
+2024-W01,sales,10000,9500,10000
+```
 
 ## 🤝 Support & Contributing
 
-For questions, issues, or feature requests, please refer to the application's help sections or contact your system administrator.
-
 ### Feature Roadmap
-- [x] **Forecast accuracy evaluation** ✅ (Completed)
-- [x] **Multi-format data upload support** ✅ (Completed)
-- [ ] Multi-echelon optimization
-- [ ] Cost optimization algorithms
-- [ ] Integration with ERP systems
+- [x] **Inventory Planning with ABC Analysis** ✅
+- [x] **Demand Planning with Forecast Accuracy** ✅
+- [x] **Supply Planning with Capacity Optimization** ✅
+- [x] **Financial Planning with Budget Analysis** ✅
+- [x] **S&OP with Integrated Planning** ✅
+- [x] **S&OE with Real-time Execution** ✅
 - [ ] Advanced ML models for demand prediction
-- [ ] Automated forecast bias correction
-- [ ] Real-time forecast accuracy monitoring
+- [ ] Multi-echelon inventory optimization
+- [ ] Integration with ERP systems
+- [ ] Real-time data connectivity
+- [ ] Advanced optimization algorithms
+- [ ] Mobile-responsive dashboard
+
+### Performance Guidelines
+- For datasets >10K records, consider data aggregation
+- Use filters for specific analysis focus
+- Regular performance monitoring recommended
+- Export results for offline analysis
+
+### Best Practices
+- **Data Preparation**: Ensure data consistency and completeness
+- **Regular Monitoring**: Set up regular review cycles
+- **Cross-functional Collaboration**: Use consensus features for alignment
+- **Continuous Improvement**: Use gap analysis for process enhancement
 
 ## 📄 License
 
@@ -300,4 +325,7 @@ This application is designed for internal business use. Please ensure compliance
 
 ---
 
-*Built with ❤️ for supply chain professionals* 
+*Built with ❤️ for supply chain professionals*
+
+**Version**: 2.0 - Complete Planning Suite
+**Last Updated**: December 2024 

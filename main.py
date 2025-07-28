@@ -1,7 +1,7 @@
 # main.py
 
 import streamlit as st
-from modules import demand_planning, supply_planning, inventory_planning, financial_planning, sop
+from modules import demand_planning, supply_planning, inventory_planning, financial_planning, sop, soe
 
 def main():
     st.set_page_config(
@@ -23,7 +23,7 @@ def main():
     st.sidebar.title("🧭 Navigation")
     selected_module = st.sidebar.radio(
         "Select Module", 
-        ["🏭 Inventory Planning", "📊 Demand Planning", "🚚 Supply Planning", "💰 Financial Planning", "📋 SOP"],
+        ["🏭 Inventory Planning", "📊 Demand Planning", "🚚 Supply Planning", "💰 Financial Planning", "📋 S&OP", "⚡ S&OE"],
         help="Choose the planning module you want to work with"
     )
     
@@ -58,8 +58,10 @@ def main():
         supply_planning.run()
     elif selected_module == "💰 Financial Planning":
         financial_planning.run()
-    elif selected_module == "📋 SOP":
+    elif selected_module == "📋 S&OP":
         sop.run()
+    elif selected_module == "⚡ S&OE":
+        soe.run()
     
     # Footer
     st.sidebar.markdown("---")
