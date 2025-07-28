@@ -1,0 +1,43 @@
+period,category,budget,actual,type,sku,revenue,costs
+2024-01,Sales Revenue,500000,485000,Budget,Product_A,150000,90000
+2024-01,Cost of Goods Sold,200000,195000,Budget,Product_A,150000,90000
+2024-01,Marketing,50000,52000,Budget,Product_B,200000,120000
+2024-01,Operations,45000,43000,Budget,Product_B,200000,120000
+2024-01,Personnel,75000,78000,Budget,Product_C,135000,85000
+2024-01,Facilities,25000,24500,Budget,Product_C,135000,85000
+2024-01,Technology,30000,32000,Budget,Product_D,180000,110000
+2024-02,Sales Revenue,520000,508000,Budget,Product_A,155000,92000
+2024-02,Cost of Goods Sold,210000,205000,Budget,Product_A,155000,92000
+2024-02,Marketing,52000,51000,Budget,Product_B,210000,125000
+2024-02,Operations,47000,45000,Budget,Product_B,210000,125000
+2024-02,Personnel,76000,79000,Budget,Product_C,143000,88000
+2024-02,Facilities,26000,25000,Budget,Product_C,143000,88000
+2024-02,Technology,31000,33000,Budget,Product_D,185000,115000
+2024-03,Sales Revenue,515000,525000,Budget,Product_A,160000,95000
+2024-03,Cost of Goods Sold,205000,210000,Budget,Product_A,160000,95000
+2024-03,Marketing,51000,53000,Budget,Product_B,205000,122000
+2024-03,Operations,46000,47000,Budget,Product_B,205000,122000
+2024-03,Personnel,77000,76000,Budget,Product_C,140000,86000
+2024-03,Facilities,25500,26000,Budget,Product_C,140000,86000
+2024-03,Technology,32000,31000,Budget,Product_D,190000,118000
+2024-04,Sales Revenue,530000,515000,Budget,Product_A,158000,94000
+2024-04,Cost of Goods Sold,212000,206000,Budget,Product_A,158000,94000
+2024-04,Marketing,53000,52500,Budget,Product_B,215000,128000
+2024-04,Operations,48000,46500,Budget,Product_B,215000,128000
+2024-04,Personnel,78000,80000,Budget,Product_C,142000,87000
+2024-04,Facilities,27000,26500,Budget,Product_C,142000,87000
+2024-04,Technology,33000,34000,Budget,Product_D,195000,120000
+2024-05,Sales Revenue,545000,538000,Budget,Product_A,165000,98000
+2024-05,Cost of Goods Sold,218000,215000,Budget,Product_A,165000,98000
+2024-05,Marketing,54000,55000,Budget,Product_B,220000,132000
+2024-05,Operations,49000,48000,Budget,Product_B,220000,132000
+2024-05,Personnel,79000,81000,Budget,Product_C,145000,89000
+2024-05,Facilities,28000,27500,Budget,Product_C,145000,89000
+2024-05,Technology,34000,35000,Budget,Product_D,198000,122000
+2024-06,Sales Revenue,540000,548000,Budget,Product_A,162000,96000
+2024-06,Cost of Goods Sold,216000,220000,Budget,Product_A,162000,96000
+2024-06,Marketing,53500,54000,Budget,Product_B,218000,130000
+2024-06,Operations,48500,49000,Budget,Product_B,218000,130000
+2024-06,Personnel,80000,79500,Budget,Product_C,148000,91000
+2024-06,Facilities,27500,28000,Budget,Product_C,148000,91000
+2024-06,Technology,35000,34500,Budget,Product_D,200000,125000
